@@ -1,0 +1,411 @@
+/* ============================================
+   Merlinda's Soaperie - Custom Styles
+   Handcrafted with love, just like our soaps
+   ============================================ */
+
+/* Root Variables */
+:root {
+    --cream: #F5EFE7;
+    --terracotta: #A0522D;
+    --gold: #D4A574;
+    --dark-brown: #654321;
+    --white: #FFFFFF;
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Typography */
+.section-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3rem;
+    color: var(--terracotta);
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* Navigation Links */
+.nav-link {
+    position: relative;
+    font-weight: 500;
+    color: var(--dark-brown);
+    text-decoration: none;
+    padding-bottom: 0.25rem;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--terracotta);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Buttons */
+.btn-primary {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--terracotta) 0%, #8B4513 100%);
+    color: var(--cream);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(160, 82, 45, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(160, 82, 45, 0.4);
+    background: linear-gradient(135deg, #8B4513 0%, var(--terracotta) 100%);
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: transparent;
+    color: var(--terracotta);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    border: 2px solid var(--terracotta);
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--terracotta);
+    color: var(--cream);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(160, 82, 45, 0.3);
+}
+
+/* Feature Cards */
+.feature-card {
+    padding: 1.5rem;
+    background: var(--cream);
+    border-radius: 12px;
+    border-left: 4px solid var(--gold);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateX(8px);
+    box-shadow: -4px 4px 20px rgba(212, 165, 116, 0.2);
+}
+
+/* Product Cards */
+.product-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 2px solid transparent;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(160, 82, 45, 0.15);
+    border-color: var(--gold);
+}
+
+.product-image-placeholder {
+    width: 100%;
+    height: 250px;
+    background: linear-gradient(135deg, var(--cream) 0%, #E8DFD5 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.product-card:hover .product-image-placeholder {
+    background: linear-gradient(135deg, #E8DFD5 0%, var(--cream) 100%);
+    transform: scale(1.05);
+}
+
+/* Benefit Cards */
+.benefit-card {
+    text-align: center;
+    padding: 2rem;
+    background: var(--white);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.benefit-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(160, 82, 45, 0.1);
+}
+
+.benefit-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, var(--terracotta) 0%, #8B4513 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream);
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+    transform: rotate(360deg) scale(1.1);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--terracotta) 100%);
+}
+
+/* Social Links */
+.social-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--white);
+    border-radius: 12px;
+    color: var(--terracotta);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.social-link:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(160, 82, 45, 0.15);
+    background: var(--terracotta);
+    color: var(--cream);
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: var(--cream);
+    color: var(--terracotta);
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid var(--gold);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+/* Stagger animation delays for multiple items */
+.fade-in:nth-child(1) { animation-delay: 0.1s; }
+.fade-in:nth-child(2) { animation-delay: 0.2s; }
+.fade-in:nth-child(3) { animation-delay: 0.3s; }
+.fade-in:nth-child(4) { animation-delay: 0.4s; }
+.fade-in:nth-child(5) { animation-delay: 0.5s; }
+.fade-in:nth-child(6) { animation-delay: 0.6s; }
+
+/* Scroll Animation Class (added by JavaScript) */
+.scroll-fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.scroll-fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Header Shadow on Scroll */
+header.scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Decorative Elements */
+.decorative-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--terracotta) 100%);
+    opacity: 0.1;
+    z-index: -1;
+}
+
+/* Mobile Menu Transitions */
+#mobile-menu {
+    transition: all 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+#mobile-menu.active {
+    max-height: 500px;
+}
+
+/* Responsive Typography */
+@media (max-width: 640px) {
+    html {
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+/* Loading Animation for Shopify Products */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cream);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--terracotta) 0%, var(--gold) 100%);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--gold) 0%, var(--terracotta) 100%);
+}
+
+/* Selection Color */
+::selection {
+    background: var(--terracotta);
+    color: var(--cream);
+}
+
+::-moz-selection {
+    background: var(--terracotta);
+    color: var(--cream);
+}
+
+/* Focus Styles for Accessibility */
+a:focus,
+button:focus {
+    outline: 3px solid var(--gold);
+    outline-offset: 2px;
+}
+
+/* Smooth Transitions */
+* {
+    transition-property: color, background-color, border-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+/* Print Styles */
+@media print {
+    header,
+    footer,
+    #mobile-menu-btn {
+        display: none;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+}
+
+/* Utility Classes */
+.text-gradient {
+    background: linear-gradient(135deg, var(--terracotta) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bg-pattern {
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(212, 165, 116, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(160, 82, 45, 0.1) 0%, transparent 50%);
+}
+
+/* Hover Effects for Images */
+img {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.02);
+}
+
+/* Shopify Integration Styles */
+.shopify-buy-frame {
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+/* Make sure Shopify elements match our theme */
+.shopify-buy__btn {
+    background-color: var(--terracotta) !important;
+    transition: all 0.3s ease !important;
+}
+
+.shopify-buy__btn:hover {
+    background-color: var(--gold) !important;
+    transform: translateY(-2px);
+}

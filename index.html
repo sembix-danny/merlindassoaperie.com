@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Merlinda's Soaperie - Handcrafted organic soaps made with love and natural ingredients">
+    <title>Merlinda's Soaperie | Handcrafted Organic Soaps</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F5EFE7',
+                        terracotta: '#A0522D',
+                        gold: '#D4A574',
+                        'dark-brown': '#654321',
+                    },
+                    fontFamily: {
+                        script: ['Dancing Script', 'cursive'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-cream text-dark-brown font-sans">
+
+    <!-- Header/Navigation -->
+    <header class="fixed top-0 w-full bg-cream/95 backdrop-blur-sm shadow-md z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="assets/images/merlindassoaperie.transaparent.com.png" alt="Merlinda's Soaperie Logo" class="h-16 w-16 md:h-20 md:w-20">
+                    <div class="ml-3">
+                        <h1 class="font-script text-2xl md:text-3xl text-terracotta">Merlinda's</h1>
+                        <p class="text-xs md:text-sm text-terracotta/80 uppercase tracking-wide">Soaperie</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link hover:text-terracotta transition">Home</a>
+                    <a href="#about" class="nav-link hover:text-terracotta transition">About</a>
+                    <a href="#products" class="nav-link hover:text-terracotta transition">Products</a>
+                    <a href="#benefits" class="nav-link hover:text-terracotta transition">Benefits</a>
+                    <a href="#contact" class="nav-link hover:text-terracotta transition">Contact</a>
+
+                    <!-- Social Icons -->
+                    <div class="flex items-center space-x-4 ml-4 border-l border-gold pl-4">
+                        <a href="https://www.facebook.com/maliska.moraleja" target="_blank" rel="noopener noreferrer"
+                           class="text-terracotta hover:text-gold transition transform hover:scale-110" aria-label="Facebook">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@merlindadelamarkovic3980" target="_blank" rel="noopener noreferrer"
+                           class="text-terracotta hover:text-gold transition transform hover:scale-110" aria-label="YouTube">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-terracotta focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="nav-link hover:text-terracotta transition">Home</a>
+                    <a href="#about" class="nav-link hover:text-terracotta transition">About</a>
+                    <a href="#products" class="nav-link hover:text-terracotta transition">Products</a>
+                    <a href="#benefits" class="nav-link hover:text-terracotta transition">Benefits</a>
+                    <a href="#contact" class="nav-link hover:text-terracotta transition">Contact</a>
+
+                    <!-- Mobile Social Icons -->
+                    <div class="flex items-center space-x-6 pt-4 border-t border-gold">
+                        <a href="https://www.facebook.com/maliska.moraleja" target="_blank" rel="noopener noreferrer"
+                           class="text-terracotta hover:text-gold transition" aria-label="Facebook">
+                            <i class="fab fa-facebook-f text-2xl"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@merlindadelamarkovic3980" target="_blank" rel="noopener noreferrer"
+                           class="text-terracotta hover:text-gold transition" aria-label="YouTube">
+                            <i class="fab fa-youtube text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-20 px-4">
+        <div class="container mx-auto text-center">
+            <div class="max-w-4xl mx-auto fade-in">
+                <img src="assets/images/merlindassoaperie.transaparent.com.png" alt="Merlinda's Soaperie" class="mx-auto mb-8 w-48 h-48 md:w-64 md:h-64">
+                <h2 class="font-script text-5xl md:text-7xl text-terracotta mb-6">Handcrafted With Love</h2>
+                <p class="text-xl md:text-2xl text-dark-brown/80 mb-8 leading-relaxed">
+                    Pure, organic soaps made with natural ingredients for your skin's well-being
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#products" class="btn-primary">
+                        Shop Our Collection
+                    </a>
+                    <a href="#about" class="btn-secondary">
+                        Our Story
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-4 bg-white">
+        <div class="container mx-auto">
+            <div class="max-w-4xl mx-auto text-center fade-in">
+                <h2 class="section-title">About Merlinda's Soaperie</h2>
+                <div class="w-24 h-1 bg-gold mx-auto mb-8"></div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center text-left">
+                    <div>
+                        <h3 class="font-script text-3xl text-terracotta mb-4">Crafted by Nature</h3>
+                        <p class="text-lg text-dark-brown/80 mb-4 leading-relaxed">
+                            Every bar of soap at Merlinda's Soaperie is lovingly handcrafted using only the finest organic ingredients.
+                            We believe in the power of nature to nourish and protect your skin.
+                        </p>
+                        <p class="text-lg text-dark-brown/80 leading-relaxed">
+                            Our small-batch soaps are made with traditional methods, ensuring each bar receives the care and attention
+                            it deserves. No harsh chemicals, no artificial fragrances – just pure, natural goodness.
+                        </p>
+                    </div>
+                    <div class="flex flex-col space-y-4">
+                        <div class="feature-card">
+                            <i class="fas fa-leaf text-3xl text-terracotta mb-3"></i>
+                            <h4 class="font-bold text-lg mb-2">100% Natural</h4>
+                            <p class="text-dark-brown/70">Only organic, sustainably sourced ingredients</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-hand-holding-heart text-3xl text-terracotta mb-3"></i>
+                            <h4 class="font-bold text-lg mb-2">Handmade</h4>
+                            <p class="text-dark-brown/70">Crafted in small batches with love and care</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-spa text-3xl text-terracotta mb-3"></i>
+                            <h4 class="font-bold text-lg mb-2">Skin Loving</h4>
+                            <p class="text-dark-brown/70">Gentle formulas for all skin types</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section (Shopify Integration Ready) -->
+    <section id="products" class="py-20 px-4 bg-cream">
+        <div class="container mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="section-title">Our Soap Collection</h2>
+                <div class="w-24 h-1 bg-gold mx-auto mb-4"></div>
+                <p class="text-lg text-dark-brown/80 max-w-2xl mx-auto">
+                    Discover our carefully curated selection of handcrafted organic soaps
+                </p>
+            </div>
+
+            <!-- Shopify Buy Button/Embed will be inserted here -->
+            <div id="shopify-products" class="max-w-6xl mx-auto">
+                <!-- Placeholder product grid - will be replaced with Shopify embed -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+
+                    <!-- Product Cards -->
+                    <div class="product-card fade-in">
+                        <div class="product-image-placeholder">
+                            <i class="fas fa-sun text-6xl text-terracotta/30"></i>
+                        </div>
+                        <h3 class="font-script text-2xl text-terracotta mb-2">Solar Kiss Papaya Soap</h3>
+                        <p class="text-dark-brown/70 mb-4">Tropical papaya bliss for radiant skin</p>
+                        <button class="btn-primary w-full">View Details</button>
+                    </div>
+
+                    <div class="product-card fade-in">
+                        <div class="product-image-placeholder">
+                            <i class="fas fa-seedling text-6xl text-terracotta/30"></i>
+                        </div>
+                        <h3 class="font-script text-2xl text-terracotta mb-2">Golden Bloom Dandelion Soap</h3>
+                        <p class="text-dark-brown/70 mb-4">Nature's golden treasure for gentle cleansing</p>
+                        <button class="btn-primary w-full">View Details</button>
+                    </div>
+
+                </div>
+
+                <!-- Instructions for Shopify Integration -->
+                <div class="mt-12 p-6 bg-white rounded-lg shadow-md">
+                    <h4 class="font-bold text-lg text-terracotta mb-2">
+                        <i class="fas fa-shopping-cart mr-2"></i>Shopify Integration Ready
+                    </h4>
+                    <p class="text-dark-brown/70">
+                        This section is ready for your Shopify Buy Button or embedded product collection.
+                        Simply replace the placeholder products above with your Shopify embed code.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-20 px-4 bg-white">
+        <div class="container mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="section-title">Why Choose Natural Soap?</h2>
+                <div class="w-24 h-1 bg-gold mx-auto mb-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="benefit-card fade-in">
+                    <div class="benefit-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-terracotta">Eco-Friendly</h3>
+                    <p class="text-dark-brown/70">
+                        Biodegradable ingredients that are gentle on the environment
+                    </p>
+                </div>
+
+                <div class="benefit-card fade-in">
+                    <div class="benefit-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-terracotta">Skin Health</h3>
+                    <p class="text-dark-brown/70">
+                        Nourishing oils and butters that moisturize naturally
+                    </p>
+                </div>
+
+                <div class="benefit-card fade-in">
+                    <div class="benefit-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-terracotta">No Chemicals</h3>
+                    <p class="text-dark-brown/70">
+                        Free from parabens, sulfates, and artificial additives
+                    </p>
+                </div>
+
+                <div class="benefit-card fade-in">
+                    <div class="benefit-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-terracotta">Premium Quality</h3>
+                    <p class="text-dark-brown/70">
+                        Small-batch production ensures the highest standards
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4 bg-cream">
+        <div class="container mx-auto">
+            <div class="max-w-2xl mx-auto text-center fade-in">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="w-24 h-1 bg-gold mx-auto mb-8"></div>
+
+                <p class="text-lg text-dark-brown/80 mb-8">
+                    Have questions about our products? We'd love to hear from you!
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-6 mb-8">
+                    <a href="https://www.facebook.com/maliska.moraleja" target="_blank" rel="noopener noreferrer"
+                       class="social-link">
+                        <i class="fab fa-facebook-f text-2xl mb-2"></i>
+                        <span class="block text-sm">Follow on Facebook</span>
+                    </a>
+                    <a href="https://www.youtube.com/@merlindadelamarkovic3980" target="_blank" rel="noopener noreferrer"
+                       class="social-link">
+                        <i class="fab fa-youtube text-2xl mb-2"></i>
+                        <span class="block text-sm">Watch on YouTube</span>
+                    </a>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h3 class="font-script text-3xl text-terracotta mb-4">Stay Updated</h3>
+                    <p class="text-dark-brown/70 mb-6">
+                        Follow us on social media for the latest products, tips, and behind-the-scenes content!
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <span class="badge">
+                            <i class="fas fa-check-circle mr-2"></i>New Product Launches
+                        </span>
+                        <span class="badge">
+                            <i class="fas fa-check-circle mr-2"></i>Special Offers
+                        </span>
+                        <span class="badge">
+                            <i class="fas fa-check-circle mr-2"></i>Soap Making Tips
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-brown text-cream py-12 px-4">
+        <div class="container mx-auto">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <!-- About -->
+                    <div>
+                        <h3 class="font-script text-2xl mb-4 text-gold">Merlinda's Soaperie</h3>
+                        <p class="text-cream/80 leading-relaxed">
+                            Handcrafted organic soaps made with love and natural ingredients for your skin's well-being.
+                        </p>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="font-bold text-lg mb-4 text-gold">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#home" class="text-cream/80 hover:text-gold transition">Home</a></li>
+                            <li><a href="#about" class="text-cream/80 hover:text-gold transition">About</a></li>
+                            <li><a href="#products" class="text-cream/80 hover:text-gold transition">Products</a></li>
+                            <li><a href="#benefits" class="text-cream/80 hover:text-gold transition">Benefits</a></li>
+                            <li><a href="#contact" class="text-cream/80 hover:text-gold transition">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div>
+                        <h4 class="font-bold text-lg mb-4 text-gold">Connect With Us</h4>
+                        <div class="flex space-x-4 mb-4">
+                            <a href="https://www.facebook.com/maliska.moraleja" target="_blank" rel="noopener noreferrer"
+                               class="w-12 h-12 bg-cream/10 rounded-full flex items-center justify-center hover:bg-gold transition transform hover:scale-110"
+                               aria-label="Facebook">
+                                <i class="fab fa-facebook-f text-xl"></i>
+                            </a>
+                            <a href="https://www.youtube.com/@merlindadelamarkovic3980" target="_blank" rel="noopener noreferrer"
+                               class="w-12 h-12 bg-cream/10 rounded-full flex items-center justify-center hover:bg-gold transition transform hover:scale-110"
+                               aria-label="YouTube">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </a>
+                        </div>
+                        <p class="text-cream/60 text-sm">Follow us for updates and soap-making tips!</p>
+                    </div>
+                </div>
+
+                <!-- Copyright -->
+                <div class="border-t border-cream/20 pt-8 text-center">
+                    <p class="text-cream/60 text-sm">
+                        &copy; 2024 Merlinda's Soaperie. All rights reserved. | Handcrafted with
+                        <i class="fas fa-heart text-gold mx-1"></i> for your skin
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>
