@@ -12,10 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuIcon = mobileMenuBtn.querySelector('i');
 
     mobileMenuBtn.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('active');
 
         // Toggle icon between bars and times
-        if (mobileMenu.classList.contains('hidden')) {
+        if (!mobileMenu.classList.contains('active')) {
             menuIcon.classList.remove('fa-times');
             menuIcon.classList.add('fa-bars');
         } else {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileLinks = mobileMenu.querySelectorAll('a');
     mobileLinks.forEach(link => {
         link.addEventListener('click', function() {
-            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('active');
             menuIcon.classList.remove('fa-times');
             menuIcon.classList.add('fa-bars');
         });
