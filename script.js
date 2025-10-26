@@ -320,6 +320,89 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ============================================
+// Product Modal Functionality
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all modal triggers (View Details buttons)
+    const modalTriggers = document.querySelectorAll('[data-modal]');
+    const modals = document.querySelectorAll('.modal');
+
+    // Function to open modal
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.classList.add('modal-open');
+
+            // Add animation class to modal content
+            const modalContent = modal.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.style.animation = 'none';
+                setTimeout(() => {
+                    modalContent.style.animation = '';
+                }, 10);
+            }
+        }
+    }
+
+    // Function to close modal
+    function closeModal(modal) {
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+    }
+
+    // Add click event to all View Details buttons
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modalId = this.getAttribute('data-modal');
+            openModal(modalId);
+        });
+    });
+
+    // Add close functionality to each modal
+    modals.forEach(modal => {
+        // Close button
+        const closeBtn = modal.querySelector('.modal-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                closeModal(modal);
+            });
+        }
+
+        // Close when clicking overlay
+        const overlay = modal.querySelector('.modal-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                closeModal(modal);
+            });
+        }
+
+        // Prevent closing when clicking modal content
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+    });
+
+    // Close modal on ESC key press
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            modals.forEach(modal => {
+                if (modal.classList.contains('active')) {
+                    closeModal(modal);
+                }
+            });
+        }
+    });
+});
+
+
+// ============================================
 // Console Art (Just for fun!)
 // ============================================
 console.log(`

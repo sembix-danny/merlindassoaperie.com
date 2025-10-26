@@ -137,6 +137,13 @@
 
                 <div class="grid md:grid-cols-2 gap-12 items-center text-left">
                     <div>
+                        <div class="flex flex-col items-center mb-8">
+                            <img src="assets/images/merlinda.jpeg" alt="Merlinda, Founder of Merlinda's Soaperie" class="founder-photo">
+                            <p class="text-center text-sm text-dark-brown/70 mt-4 italic">
+                                <i class="fas fa-seedling text-gold mr-1"></i>
+                                Merlinda with fresh flowers from our Washougal farm
+                            </p>
+                        </div>
                         <h3 class="font-script text-3xl text-terracotta mb-4">Crafted by Nature</h3>
                         <p class="text-lg text-dark-brown/80 mb-4 leading-relaxed">
                             Every bar of soap at Merlinda's Soaperie is lovingly handcrafted using only the finest organic ingredients.
@@ -180,41 +187,32 @@
                 </p>
             </div>
 
-            <!-- Shopify Buy Button/Embed will be inserted here -->
+            <!-- Product Grid -->
             <div id="shopify-products" class="max-w-6xl mx-auto">
-                <!-- Placeholder product grid - will be replaced with Shopify embed -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
 
-                    <!-- Product Cards -->
+                    <!-- Solar Kiss Papaya Soap -->
                     <div class="product-card fade-in">
+                        <span class="coming-soon-badge">Coming Soon</span>
                         <div class="product-image-placeholder">
                             <i class="fas fa-sun text-6xl text-terracotta/30"></i>
                         </div>
                         <h3 class="font-script text-2xl text-terracotta mb-2">Solar Kiss Papaya Soap</h3>
                         <p class="text-dark-brown/70 mb-4">Tropical papaya bliss for radiant skin</p>
-                        <button class="btn-primary w-full">View Details</button>
+                        <button class="btn-primary w-full" data-modal="papaya-modal">View Details</button>
                     </div>
 
+                    <!-- Golden Bloom Dandelion Soap -->
                     <div class="product-card fade-in">
+                        <span class="coming-soon-badge">Coming Soon</span>
                         <div class="product-image-placeholder">
                             <i class="fas fa-seedling text-6xl text-terracotta/30"></i>
                         </div>
                         <h3 class="font-script text-2xl text-terracotta mb-2">Golden Bloom Dandelion Soap</h3>
                         <p class="text-dark-brown/70 mb-4">Nature's golden treasure for gentle cleansing</p>
-                        <button class="btn-primary w-full">View Details</button>
+                        <button class="btn-primary w-full" data-modal="dandelion-modal">View Details</button>
                     </div>
 
-                </div>
-
-                <!-- Instructions for Shopify Integration -->
-                <div class="mt-12 p-6 bg-white rounded-lg shadow-md">
-                    <h4 class="font-bold text-lg text-terracotta mb-2">
-                        <i class="fas fa-shopping-cart mr-2"></i>Shopify Integration Ready
-                    </h4>
-                    <p class="text-dark-brown/70">
-                        This section is ready for your Shopify Buy Button or embedded product collection.
-                        Simply replace the placeholder products above with your Shopify embed code.
-                    </p>
                 </div>
             </div>
         </div>
@@ -371,6 +369,134 @@
             </div>
         </div>
     </footer>
+
+    <!-- Product Modals -->
+
+    <!-- Solar Kiss Papaya Soap Modal -->
+    <div id="papaya-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-sun text-5xl text-gold mb-4"></i>
+                <h3 class="font-script text-4xl text-terracotta mb-2">Solar Kiss Papaya Soap</h3>
+                <span class="inline-block bg-gold text-white px-4 py-2 rounded-full text-sm font-semibold">Coming Soon</span>
+            </div>
+            <div class="modal-body">
+                <p class="text-lg text-dark-brown/80 mb-6 leading-relaxed">
+                    Experience the tropical luxury of our Solar Kiss Papaya Soap. Infused with natural papaya enzymes
+                    and nourishing botanicals, this handcrafted soap brings sunshine to your daily skincare routine.
+                </p>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-terracotta mb-3">
+                        <i class="fas fa-leaf mr-2"></i>Key Ingredients
+                    </h4>
+                    <ul class="list-disc list-inside space-y-2 text-dark-brown/80">
+                        <li>Organic papaya extract - Natural exfoliation</li>
+                        <li>Coconut oil - Deep moisture</li>
+                        <li>Shea butter - Skin nourishment</li>
+                        <li>Essential oils - Tropical fragrance</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-terracotta mb-3">
+                        <i class="fas fa-heart mr-2"></i>Benefits
+                    </h4>
+                    <ul class="list-disc list-inside space-y-2 text-dark-brown/80">
+                        <li>Gently exfoliates dead skin cells</li>
+                        <li>Brightens and evens skin tone</li>
+                        <li>Hydrates and softens skin</li>
+                        <li>Rich, creamy lather</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-terracotta mb-3">
+                        <i class="fas fa-spa mr-2"></i>Scent Profile
+                    </h4>
+                    <p class="text-dark-brown/80">
+                        Sweet tropical papaya with hints of coconut and vanilla - like a sunny beach vacation
+                    </p>
+                </div>
+
+                <div class="bg-gold/10 p-4 rounded-lg border-l-4 border-gold">
+                    <p class="text-dark-brown font-semibold">
+                        <i class="fas fa-clock mr-2"></i>
+                        Not yet available for purchase. Check back soon for our launch date!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Golden Bloom Dandelion Soap Modal -->
+    <div id="dandelion-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-seedling text-5xl text-gold mb-4"></i>
+                <h3 class="font-script text-4xl text-terracotta mb-2">Golden Bloom Dandelion Soap</h3>
+                <span class="inline-block bg-gold text-white px-4 py-2 rounded-full text-sm font-semibold">Coming Soon</span>
+            </div>
+            <div class="modal-body">
+                <p class="text-lg text-dark-brown/80 mb-6 leading-relaxed">
+                    Harness the power of nature with our Golden Bloom Dandelion Soap. Made with dandelions harvested
+                    from our farm in Washougal, WA, this soap brings the gentle healing properties of this golden flower
+                    to your skin.
+                </p>
+
+                <div class="mb-6 bg-cream p-4 rounded-lg border-2 border-gold">
+                    <p class="text-dark-brown/90 font-semibold">
+                        <i class="fas fa-map-marker-alt mr-2 text-gold"></i>
+                        Featuring dandelions harvested from our farm in Washougal, WA
+                    </p>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-terracotta mb-3">
+                        <i class="fas fa-leaf mr-2"></i>Key Ingredients
+                    </h4>
+                    <ul class="list-disc list-inside space-y-2 text-dark-brown/80">
+                        <li>Farm-fresh dandelion extract - Antioxidant rich</li>
+                        <li>Olive oil - Gentle cleansing</li>
+                        <li>Raw honey - Natural antibacterial</li>
+                        <li>Essential oils - Earthy floral notes</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-terracotta mb-3">
+                        <i class="fas fa-heart mr-2"></i>Benefits
+                    </h4>
+                    <ul class="list-disc list-inside space-y-2 text-dark-brown/80">
+                        <li>Soothes and calms irritated skin</li>
+                        <li>Detoxifies and purifies</li>
+                        <li>Rich in vitamins A, C, and K</li>
+                        <li>Suitable for sensitive skin</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-terracotta mb-3">
+                        <i class="fas fa-spa mr-2"></i>Scent Profile
+                    </h4>
+                    <p class="text-dark-brown/80">
+                        Earthy, herbaceous notes with a hint of honey sweetness - fresh from the garden
+                    </p>
+                </div>
+
+                <div class="bg-gold/10 p-4 rounded-lg border-l-4 border-gold">
+                    <p class="text-dark-brown font-semibold">
+                        <i class="fas fa-clock mr-2"></i>
+                        Not yet available for purchase. Check back soon for our launch date!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
