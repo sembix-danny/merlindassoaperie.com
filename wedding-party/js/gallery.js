@@ -1,6 +1,37 @@
-// Wedding Gallery JavaScript - Photos & Videos
+// Wedding Gallery JavaScript - Secure Static Gate
+// NOTE: This provides friction against casual access only.
+// Direct asset URLs remain accessible if discovered/shared.
+// This is NOT true security against a motivated attacker.
+
 (function() {
     'use strict';
+
+    // ============================================
+    // AUTHENTICATION CONFIG
+    // ============================================
+
+    // SHA-256 hash of password (no plaintext stored)
+    const EXPECTED_HASH_HEX = 'bc01479f6c34b5c8ce26ba622792ec56cd1e27a6a622d4b5293a14b9751ff4bb';
+
+    const SESSION_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
+    const MAX_FAILS = 5;
+    const LOCKOUT_BASE_MS = 30 * 1000; // 30 seconds
+    const LOCKOUT_CAP_MS = 5 * 60 * 1000; // 5 minutes max
+
+    // ============================================
+    // LOGIN ELEMENTS (available before unlock)
+    // ============================================
+
+    const loginModal = document.getElementById('login-modal');
+    const loginForm = document.getElementById('login-form');
+    const passwordInput = document.getElementById('password-input');
+    const loginError = document.getElementById('login-error');
+    const appContainer = document.getElementById('app');
+    const galleryTemplate = document.getElementById('gallery-template');
+
+    // ============================================
+    // GALLERY STATE (set after unlock)
+    // ============================================
 
     let allMedia = [];
     let images = [];
@@ -10,115 +41,184 @@
     let selectionMode = false;
     let selectedItems = new Set();
 
-    // DOM Elements
-    const gallery = document.getElementById('gallery');
-    const videoGallery = document.getElementById('video-gallery');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImage = document.getElementById('lightbox-image');
-    const lightboxVideo = document.getElementById('lightbox-video');
-    const lightboxCounter = document.getElementById('lightbox-counter');
-    const imageCount = document.getElementById('image-count');
-    const videoCount = document.getElementById('video-count');
-    const selectToggle = document.getElementById('select-toggle');
-    const selectionCount = document.getElementById('selection-count');
-    const downloadZipBtn = document.getElementById('download-zip');
-    const loginModal = document.getElementById('login-modal');
-    const loginForm = document.getElementById('login-form');
-    const passwordInput = document.getElementById('password-input');
-    const loginError = document.getElementById('login-error');
-    const welcomeModal = document.getElementById('welcome-modal');
-    const welcomeClose = document.getElementById('welcome-close');
+    // Gallery DOM elements (assigned after template mount)
+    let gallery, lightbox, lightboxImage, lightboxVideo, lightboxCounter;
+    let imageCount, videoCount, selectToggle, selectionCount, downloadZipBtn;
+    let welcomeModal, welcomeClose;
 
-    // Password for gallery access
-    const GALLERY_PASSWORD = 'WeddingParty2025';
+    // ============================================
+    // CRYPTO UTILITIES
+    // ============================================
 
-    // Check authentication
-    function checkAuth() {
-        if (sessionStorage.getItem('gallery_authenticated') === 'true') {
-            loginModal.classList.add('hidden');
-            // Start pulsing Select button to draw attention
-            selectToggle.classList.add('pulse');
+    function bufToHex(buf) {
+        return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function sha256Hex(text) {
+        const enc = new TextEncoder().encode(text);
+        const digest = await crypto.subtle.digest('SHA-256', enc);
+        return bufToHex(digest);
+    }
+
+    // ============================================
+    // AUTH STATE MANAGEMENT
+    // ============================================
+
+    function getAuthState() {
+        return {
+            fails: Number(localStorage.getItem('gallery_fails') || '0'),
+            lockedUntil: Number(localStorage.getItem('gallery_lockedUntil') || '0'),
+            unlockedUntil: Number(sessionStorage.getItem('gallery_unlockedUntil') || '0')
+        };
+    }
+
+    function setAuthState(partial) {
+        if (partial.fails !== undefined) {
+            localStorage.setItem('gallery_fails', String(partial.fails));
+        }
+        if (partial.lockedUntil !== undefined) {
+            localStorage.setItem('gallery_lockedUntil', String(partial.lockedUntil));
+        }
+        if (partial.unlockedUntil !== undefined) {
+            sessionStorage.setItem('gallery_unlockedUntil', String(partial.unlockedUntil));
+        }
+    }
+
+    function getLockoutMs(failCount) {
+        const over = Math.max(0, failCount - MAX_FAILS);
+        return Math.min(LOCKOUT_CAP_MS, LOCKOUT_BASE_MS * Math.pow(2, over));
+    }
+
+    function formatLockoutTime(ms) {
+        const seconds = Math.ceil(ms / 1000);
+        if (seconds >= 60) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
+        }
+        return `${seconds}s`;
+    }
+
+    // ============================================
+    // AUTHENTICATION
+    // ============================================
+
+    function checkExistingSession() {
+        const { unlockedUntil } = getAuthState();
+        if (unlockedUntil && unlockedUntil > Date.now()) {
+            mountGallery();
             return true;
         }
         return false;
     }
 
-    // Handle login
-    function handleLogin(e) {
+    async function handleLogin(e) {
         e.preventDefault();
-        const entered = passwordInput.value;
 
-        if (entered === GALLERY_PASSWORD) {
-            sessionStorage.setItem('gallery_authenticated', 'true');
-            loginModal.classList.add('hidden');
+        const state = getAuthState();
+        const now = Date.now();
+
+        // Check lockout
+        if (state.lockedUntil && state.lockedUntil > now) {
+            const remaining = state.lockedUntil - now;
+            loginError.textContent = `Too many attempts. Try again in ${formatLockoutTime(remaining)}.`;
+            startLockoutCountdown(state.lockedUntil);
+            return;
+        }
+
+        const candidate = passwordInput.value || '';
+        const candidateHash = await sha256Hex(candidate);
+
+        if (candidateHash === EXPECTED_HASH_HEX) {
+            // Success - clear failures and set session
+            setAuthState({
+                fails: 0,
+                lockedUntil: 0,
+                unlockedUntil: now + SESSION_TTL_MS
+            });
             loginError.textContent = '';
-
-            // Show welcome instructions if first time
-            if (!localStorage.getItem('gallery_seen_welcome')) {
-                welcomeModal.classList.remove('hidden');
-            }
-
-            // Start pulsing Select button
-            selectToggle.classList.add('pulse');
-        } else {
-            loginError.textContent = 'Incorrect password. Please try again.';
             passwordInput.value = '';
-            passwordInput.focus();
-        }
-    }
+            mountGallery();
 
-    // Close welcome modal
-    function closeWelcome() {
-        welcomeModal.classList.add('hidden');
-        localStorage.setItem('gallery_seen_welcome', 'true');
+            // Show welcome if first time
+            if (!localStorage.getItem('gallery_seen_welcome')) {
+                setTimeout(() => {
+                    welcomeModal.classList.remove('hidden');
+                }, 100);
+            }
+        } else {
+            // Failed attempt
+            const fails = state.fails + 1;
+            passwordInput.value = '';
 
-        // Run demo if first time
-        if (!localStorage.getItem('gallery_seen_demo')) {
-            setTimeout(runDemo, 500);
-        }
-    }
-
-    // Animated demo showing how to select and download
-    async function runDemo() {
-        const items = document.querySelectorAll('.gallery-item');
-        if (items.length < 4) return;
-
-        // Enter selection mode
-        toggleSelectionMode();
-
-        // Select photos at different positions (spread across rows)
-        const indicesToSelect = [0, 3, 5, 8].filter(i => i < items.length);
-
-        for (let i = 0; i < indicesToSelect.length; i++) {
-            await new Promise(resolve => setTimeout(resolve, 400));
-            const item = items[indicesToSelect[i]];
-            if (item) {
-                toggleItemSelection(item);
+            if (fails >= MAX_FAILS) {
+                const lockoutMs = getLockoutMs(fails);
+                const lockedUntil = now + lockoutMs;
+                setAuthState({ fails, lockedUntil });
+                loginError.textContent = `Too many attempts. Try again in ${formatLockoutTime(lockoutMs)}.`;
+                startLockoutCountdown(lockedUntil);
+            } else {
+                setAuthState({ fails });
+                const remaining = MAX_FAILS - fails;
+                loginError.textContent = `Incorrect password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`;
             }
         }
-
-        // Pause to show the Download ZIP pulsing
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // Clear and exit selection mode
-        toggleSelectionMode();
-
-        // Mark demo as seen
-        localStorage.setItem('gallery_seen_demo', 'true');
     }
 
-    // Initialize
-    async function init() {
-        // Check if already authenticated
-        checkAuth();
+    let lockoutInterval = null;
 
-        // Setup login form
-        loginForm.addEventListener('submit', handleLogin);
+    function startLockoutCountdown(lockedUntil) {
+        if (lockoutInterval) clearInterval(lockoutInterval);
 
-        // Setup welcome close button
-        welcomeClose.addEventListener('click', closeWelcome);
+        lockoutInterval = setInterval(() => {
+            const remaining = lockedUntil - Date.now();
+            if (remaining <= 0) {
+                clearInterval(lockoutInterval);
+                lockoutInterval = null;
+                loginError.textContent = 'You can try again now.';
+            } else {
+                loginError.textContent = `Too many attempts. Try again in ${formatLockoutTime(remaining)}.`;
+            }
+        }, 1000);
+    }
 
+    // ============================================
+    // GALLERY MOUNTING
+    // ============================================
+
+    function mountGallery() {
+        // Hide login modal
+        loginModal.style.display = 'none';
+
+        // Clone and mount template
+        const content = galleryTemplate.content.cloneNode(true);
+        appContainer.appendChild(content);
+
+        // Get DOM references after mount
+        gallery = document.getElementById('gallery');
+        lightbox = document.getElementById('lightbox');
+        lightboxImage = document.getElementById('lightbox-image');
+        lightboxVideo = document.getElementById('lightbox-video');
+        lightboxCounter = document.getElementById('lightbox-counter');
+        imageCount = document.getElementById('image-count');
+        videoCount = document.getElementById('video-count');
+        selectToggle = document.getElementById('select-toggle');
+        selectionCount = document.getElementById('selection-count');
+        downloadZipBtn = document.getElementById('download-zip');
+        welcomeModal = document.getElementById('welcome-modal');
+        welcomeClose = document.getElementById('welcome-close');
+
+        // Initialize gallery
+        initGallery();
+    }
+
+    // ============================================
+    // GALLERY INITIALIZATION
+    // ============================================
+
+    async function initGallery() {
         try {
+            // Now load media manifest (only after authentication)
             const response = await fetch('media-manifest.json');
             const manifest = await response.json();
 
@@ -130,14 +230,17 @@
             if (videoCount) videoCount.textContent = videos.length;
 
             renderGallery();
-            setupEventListeners();
+            setupGalleryEventListeners();
         } catch (error) {
             console.error('Error loading gallery:', error);
             gallery.innerHTML = '<p class="loading">Error loading gallery. Please refresh the page.</p>';
         }
     }
 
-    // Render gallery
+    // ============================================
+    // GALLERY RENDERING
+    // ============================================
+
     function renderGallery() {
         gallery.innerHTML = '';
 
@@ -156,7 +259,6 @@
             div.dataset.type = item.type;
 
             if (item.type === 'video') {
-                // Use matching JPG as thumbnail (same filename, different extension)
                 const thumbnailPath = item.path.replace('/videos/', '/images/').replace('.mp4', '.jpg');
                 div.innerHTML = `
                     <img src="${thumbnailPath}" alt="Video thumbnail" loading="lazy">
@@ -189,14 +291,16 @@
         });
     }
 
-    // Get current media list based on filter
     function getCurrentMedia() {
         return currentFilter === 'photos' ? images :
                currentFilter === 'videos' ? videos : allMedia;
     }
 
-    // Setup event listeners
-    function setupEventListeners() {
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+
+    function setupGalleryEventListeners() {
         // Filter buttons
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -225,6 +329,9 @@
 
         // Download ZIP
         downloadZipBtn.addEventListener('click', exportToZip);
+
+        // Welcome close button
+        welcomeClose.addEventListener('click', closeWelcome);
 
         // Lightbox controls
         document.getElementById('close-lightbox').addEventListener('click', closeLightbox);
@@ -266,7 +373,10 @@
         });
     }
 
-    // Open lightbox
+    // ============================================
+    // LIGHTBOX
+    // ============================================
+
     function openLightbox(index) {
         currentIndex = index;
         updateLightbox();
@@ -274,7 +384,6 @@
         document.body.style.overflow = 'hidden';
     }
 
-    // Close lightbox
     function closeLightbox() {
         if (lightboxVideo) {
             lightboxVideo.pause();
@@ -284,7 +393,6 @@
         document.body.style.overflow = '';
     }
 
-    // Navigate lightbox
     function navigateLightbox(direction) {
         if (lightboxVideo) lightboxVideo.pause();
 
@@ -296,7 +404,6 @@
         updateLightbox();
     }
 
-    // Update lightbox display
     function updateLightbox() {
         const media = getCurrentMedia();
         const item = media[currentIndex];
@@ -317,7 +424,6 @@
         }
     }
 
-    // Download current media
     function downloadCurrent() {
         const media = getCurrentMedia();
         const item = media[currentIndex];
@@ -331,7 +437,10 @@
         }
     }
 
-    // Toggle selection mode
+    // ============================================
+    // SELECTION MODE
+    // ============================================
+
     function toggleSelectionMode() {
         selectionMode = !selectionMode;
         selectToggle.classList.toggle('active', selectionMode);
@@ -348,12 +457,10 @@
                 item.classList.remove('selected');
             });
             updateSelectionCount();
-            // Remove pulse from Download ZIP
             downloadZipBtn.classList.remove('pulse');
         }
     }
 
-    // Toggle item selection
     function toggleItemSelection(itemElement) {
         const media = getCurrentMedia();
         const index = parseInt(itemElement.dataset.index, 10);
@@ -370,7 +477,6 @@
         updateSelectionCount();
     }
 
-    // Update selection count display
     function updateSelectionCount() {
         const count = selectedItems.size;
         selectionCount.textContent = `${count} selected`;
@@ -384,11 +490,13 @@
         }
     }
 
-    // Export selected items to ZIP
+    // ============================================
+    // ZIP EXPORT
+    // ============================================
+
     async function exportToZip() {
         if (selectedItems.size === 0) return;
 
-        // Stop pulsing when clicked
         downloadZipBtn.classList.remove('pulse');
 
         const originalText = downloadZipBtn.textContent;
@@ -427,6 +535,73 @@
         } finally {
             downloadZipBtn.textContent = originalText;
             downloadZipBtn.disabled = selectedItems.size === 0;
+        }
+    }
+
+    // ============================================
+    // WELCOME MODAL & DEMO
+    // ============================================
+
+    function closeWelcome() {
+        welcomeModal.classList.add('hidden');
+        localStorage.setItem('gallery_seen_welcome', 'true');
+
+        // Run demo if first time
+        if (!localStorage.getItem('gallery_seen_demo')) {
+            setTimeout(runDemo, 500);
+        }
+    }
+
+    async function runDemo() {
+        const items = document.querySelectorAll('.gallery-item');
+        if (items.length < 4) return;
+
+        // Enter selection mode
+        toggleSelectionMode();
+
+        // Select photos at different positions
+        const indicesToSelect = [0, 3, 5, 8].filter(i => i < items.length);
+
+        for (let i = 0; i < indicesToSelect.length; i++) {
+            await new Promise(resolve => setTimeout(resolve, 800));
+            const item = items[indicesToSelect[i]];
+            if (item) {
+                toggleItemSelection(item);
+            }
+        }
+
+        // Pause to show the Download ZIP pulsing
+        await new Promise(resolve => setTimeout(resolve, 2500));
+
+        // Clear and exit selection mode
+        toggleSelectionMode();
+
+        // Mark demo as seen
+        localStorage.setItem('gallery_seen_demo', 'true');
+    }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+
+    function init() {
+        // Setup login form handler
+        loginForm.addEventListener('submit', handleLogin);
+
+        // Check for existing valid session
+        if (checkExistingSession()) {
+            // Already authenticated - show welcome if first time
+            if (!localStorage.getItem('gallery_seen_welcome')) {
+                setTimeout(() => {
+                    welcomeModal.classList.remove('hidden');
+                }, 100);
+            }
+        } else {
+            // Check if currently locked out
+            const state = getAuthState();
+            if (state.lockedUntil && state.lockedUntil > Date.now()) {
+                startLockoutCountdown(state.lockedUntil);
+            }
         }
     }
 

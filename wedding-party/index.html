@@ -14,9 +14,13 @@
     <meta property="og:title" content="Merlinda & Danny's Wedding">
     <meta property="og:description" content="Photo & video gallery from our special day">
     <meta property="og:type" content="website">
+
+    <!-- Prevent search engine indexing -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow">
 </head>
 <body>
-    <!-- Login Modal -->
+    <!-- Login Modal (visible until authenticated) -->
     <div id="login-modal" class="login-modal">
         <div class="login-box">
             <div class="login-header">
@@ -25,114 +29,120 @@
                 <p>Please enter the password to view the gallery</p>
             </div>
             <form id="login-form">
-                <input type="password" id="password-input" placeholder="Enter password" autocomplete="off">
+                <input type="password" id="password-input" placeholder="Enter password" autocomplete="current-password">
                 <p id="login-error" class="login-error"></p>
                 <button type="submit" class="login-btn">Enter Gallery</button>
             </form>
         </div>
     </div>
 
-    <!-- Welcome Instructions Modal -->
-    <div id="welcome-modal" class="welcome-modal hidden">
-        <div class="welcome-box">
-            <div class="welcome-header">
-                <h2>How to Download Photos</h2>
-            </div>
-            <div class="welcome-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-text">Click the <strong>"Select"</strong> button</div>
+    <!-- App container (gallery renders here after unlock) -->
+    <div id="app"></div>
+
+    <!-- Gallery Template (not rendered until authenticated - prevents media preloading) -->
+    <template id="gallery-template">
+        <!-- Welcome Instructions Modal -->
+        <div id="welcome-modal" class="welcome-modal hidden">
+            <div class="welcome-box">
+                <div class="welcome-header">
+                    <h2>How to Download Photos</h2>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-text">Tap on photos you want to download</div>
+                <div class="welcome-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Click the <strong>"Select"</strong> button</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Tap on photos you want to download</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Click <strong>"Download ZIP"</strong> to save them all</div>
+                    </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-text">Click <strong>"Download ZIP"</strong> to save them all</div>
+                <button id="welcome-close" class="welcome-btn">Got it!</button>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="decorative-line"></div>
+                <h1>Merlinda <span class="ampersand">&</span> Danny</h1>
+                <p class="subtitle">Our Wedding Celebration</p>
+                <p class="wedding-date">December 6, 2025</p>
+                <div class="decorative-line" style="margin-top: 25px;"></div>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <span><strong id="image-count">0</strong> Photos</span>
+            <span class="separator">|</span>
+            <span><strong id="video-count">0</strong> Videos</span>
+        </div>
+
+        <!-- Filter Navigation -->
+        <nav class="gallery-nav">
+            <div class="nav-filters">
+                <button class="filter-btn active" data-filter="all">All Media</button>
+                <button class="filter-btn" data-filter="photos">Photos Only</button>
+                <button class="filter-btn" data-filter="videos">Videos Only</button>
+            </div>
+            <div class="nav-selection">
+                <button class="select-btn pulse" id="select-toggle">Select</button>
+                <span class="selection-count" id="selection-count">0 selected</span>
+                <button class="download-zip-btn" id="download-zip" disabled>Download ZIP</button>
+            </div>
+        </nav>
+
+        <!-- Gallery Container -->
+        <main class="gallery-container">
+            <div id="gallery" class="gallery">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading gallery...</p>
                 </div>
             </div>
-            <button id="welcome-close" class="welcome-btn">Got it!</button>
-        </div>
-    </div>
+        </main>
 
-    <!-- Header -->
-    <header>
-        <div class="header-content">
-            <div class="decorative-line"></div>
-            <h1>Merlinda <span class="ampersand">&</span> Danny</h1>
-            <p class="subtitle">Our Wedding Celebration</p>
-            <p class="wedding-date">December 6, 2025</p>
-            <div class="decorative-line" style="margin-top: 25px;"></div>
-        </div>
-    </header>
+        <!-- Lightbox -->
+        <div id="lightbox" class="lightbox">
+            <button class="lightbox-nav prev" id="prev-btn" aria-label="Previous">&larr;</button>
+            <button class="lightbox-nav next" id="next-btn" aria-label="Next">&rarr;</button>
 
-    <!-- Stats Bar -->
-    <div class="stats-bar">
-        <span><strong id="image-count">0</strong> Photos</span>
-        <span class="separator">|</span>
-        <span><strong id="video-count">0</strong> Videos</span>
-    </div>
+            <div class="lightbox-content">
+                <img id="lightbox-image" class="lightbox-image" src="" alt="Wedding photo">
+                <video id="lightbox-video" class="lightbox-video hidden" controls playsinline></video>
 
-    <!-- Filter Navigation -->
-    <nav class="gallery-nav">
-        <div class="nav-filters">
-            <button class="filter-btn active" data-filter="all">All Media</button>
-            <button class="filter-btn" data-filter="photos">Photos Only</button>
-            <button class="filter-btn" data-filter="videos">Videos Only</button>
-        </div>
-        <div class="nav-selection">
-            <button class="select-btn" id="select-toggle">Select</button>
-            <span class="selection-count" id="selection-count">0 selected</span>
-            <button class="download-zip-btn" id="download-zip" disabled>Download ZIP</button>
-        </div>
-    </nav>
+                <div class="lightbox-controls">
+                    <button class="lightbox-btn" id="download-btn">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        Download
+                    </button>
+                    <button class="lightbox-btn close-btn" id="close-lightbox">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                        </svg>
+                        Close
+                    </button>
+                </div>
 
-    <!-- Gallery Container -->
-    <main class="gallery-container">
-        <div id="gallery" class="gallery">
-            <div class="loading">
-                <div class="loading-spinner"></div>
-                <p>Loading gallery...</p>
+                <p class="lightbox-counter" id="lightbox-counter">1 / 1</p>
             </div>
         </div>
-    </main>
 
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox">
-        <button class="lightbox-nav prev" id="prev-btn" aria-label="Previous">&larr;</button>
-        <button class="lightbox-nav next" id="next-btn" aria-label="Next">&rarr;</button>
-
-        <div class="lightbox-content">
-            <img id="lightbox-image" class="lightbox-image" src="" alt="Wedding photo">
-            <video id="lightbox-video" class="lightbox-video hidden" controls playsinline></video>
-
-            <div class="lightbox-controls">
-                <button class="lightbox-btn" id="download-btn">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                    </svg>
-                    Download
-                </button>
-                <button class="lightbox-btn close-btn" id="close-lightbox">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-                    </svg>
-                    Close
-                </button>
-            </div>
-
-            <p class="lightbox-counter" id="lightbox-counter">1 / 1</p>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-decoration">M&D</div>
-        <p class="couple-names">Merlinda & Danny</p>
-        <p>Thank you for celebrating with us!</p>
-    </footer>
+        <!-- Footer -->
+        <footer>
+            <div class="footer-decoration">M&D</div>
+            <p class="couple-names">Merlinda & Danny</p>
+            <p>Thank you for celebrating with us!</p>
+        </footer>
+    </template>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="js/gallery.js"></script>
