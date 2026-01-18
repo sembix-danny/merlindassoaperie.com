@@ -259,7 +259,7 @@
             div.dataset.type = item.type;
 
             if (item.type === 'video') {
-                const thumbnailPath = item.path.replace('/videos/', '/images/').replace('.mp4', '.jpg');
+                const thumbnailPath = item.thumbnail || item.path.replace('/videos/', '/images/').replace('.mp4', '.jpg');
                 div.innerHTML = `
                     <img src="${thumbnailPath}" alt="Video thumbnail" loading="lazy">
                     <div class="play-icon">▶</div>
