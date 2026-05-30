@@ -399,14 +399,13 @@ img:hover {
     overflow: hidden;
 }
 
-/* Make sure Shopify elements match our theme */
+/* Button colors are set inline by the Buy Button SDK config (terracotta + #904a29 hover).
+   Keep only a subtle lift on hover so we don't override those colors. */
 .shopify-buy__btn {
-    background-color: var(--terracotta) !important;
     transition: all 0.3s ease !important;
 }
 
 .shopify-buy__btn:hover {
-    background-color: var(--gold) !important;
     transform: translateY(-2px);
 }
 
@@ -425,6 +424,31 @@ img:hover {
     letter-spacing: 0.5px;
     box-shadow: 0 4px 10px rgba(212, 165, 116, 0.4);
     z-index: 10;
+}
+
+/* Available Now Badge */
+.available-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #16a085;
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(22, 160, 133, 0.4);
+    z-index: 10;
+}
+
+/* Real product photo inside the image frame */
+.product-image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
 }
 
 .product-card {
