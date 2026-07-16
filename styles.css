@@ -296,10 +296,14 @@ header.scrolled {
     transition: all 0.3s ease;
     max-height: 0;
     overflow: hidden;
+    margin-top: 0;
+    padding-bottom: 0;
 }
 
 #mobile-menu.active {
     max-height: 500px;
+    margin-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 /* Responsive Typography */
