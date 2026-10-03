@@ -63,7 +63,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 window.addEventListener('scroll', function() {
     const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
+    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
 
     let current = '';
     const scrollPosition = window.pageYOffset;
@@ -399,6 +399,40 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+});
+
+
+// ============================================
+// Shop Page Category Filter (products.html)
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const groups = document.querySelectorAll('.product-group');
+    if (!buttons.length) return;
+
+    function applyFilter(filter) {
+        buttons.forEach(btn => {
+            btn.setAttribute('aria-pressed', btn.dataset.filter === filter ? 'true' : 'false');
+        });
+        groups.forEach(group => {
+            const show = filter === 'all' || group.dataset.group === filter;
+            group.hidden = !show;
+            // Reveal cards straight away; the scroll fade-in would otherwise leave them blank
+            if (show) group.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+        });
+    }
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            applyFilter(filter);
+            history.replaceState(null, '', filter === 'all' ? location.pathname : '#' + filter);
+        });
+    });
+
+    // Deep links from the home page: products.html#soaps / #balms
+    const fromHash = location.hash.replace('#', '');
+    applyFilter(['soaps', 'balms'].includes(fromHash) ? fromHash : 'all');
 });
 
 
