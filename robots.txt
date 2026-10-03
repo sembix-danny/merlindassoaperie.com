@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+# Private wedding gallery (its own robots.txt is ignored: crawlers only read the root one)
+Disallow: /wedding-party/
+
+Sitemap: https://merlindassoaperie.com/sitemap.xml
